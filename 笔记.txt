@@ -1,0 +1,87 @@
+1 创建版本库	
+mkdir <dir> 创建一个目录,然后切换过去
+pwd 		   显示当前目录
+git init	   把这个目录变成git可以管理的仓库
+2 提交文件到仓库
+首先手动添加文件到目录
+在将目录下的文件添加到git仓库中
+第一步:git add <file>   			--将该文件放在暂存区
+第二步:git commit -m "提交说明"	--将暂存区的所有文件更新到git仓库中
+git status         		--查看目录中文件状态
+git diff <file> 		--查看该文件修改了什么
+3 版本回退
+git log 						--查看所有提交(显示的所有日志以及详情)
+git log --pretty=oneline			--查看所有提交(没有详情)
+git reset --hard HEAD^			--回退到上一个版本
+(或者git reset --hard HEAD~1)
+git reset --hard <对应的版本号> 	--回退之后的版本然后在恢复回来的版本
+注:每个版本号都是随机生成的32位的字符串(唯一)
+如果版本号已经找不到了怎么办?
+git reflog  					--查看每一次命令(里面有版本号)
+cat <file>						--查看文件内容
+
+4 管理修改
+注: commit操作只能将暂存区的文件提交到git仓库
+git diff HEAD -- <file>  			--查看工作区与git仓库的区别
+
+5 撤销修改
+没有add之前撤销(不会撤销保存到了暂存区里的)
+git checkout -- <file>
+add了之后撤销
+①先将暂存区里的撤销	git reset HEAD <file>
+②再将工作区里的撤销	git checkout -- <file>
+commit了之后撤销	
+那没有办法撤销,只能回退版本了哦
+6 删除文件
+如果该文件没有提交到git仓库,
+rm <file>
+如果已经提交上去了
+rm <file>				--先删除本地
+git rm <file>			--删除git仓库中的文件
+git cimmit -m "remove <file>说明"
+如果在本地误删了(前提是git仓库存在)
+git checkout -- <file>	--恢复文件
+7 远程仓库
+提交:
+git remote add origin(这个自定义) git...自己的地址  --将本地仓库关联到远程仓库
+git push -u origin  master 						--将本地内容推送到远程仓库
+(第一次推送加上-u 会将本地分支与远程分支关联)
+更新(检出):
+git clone git..自己的地址
+
+8 分支管理(*)
+git checkout -b <分支名>			--创建分支并切换到新的分支
+git branch <分支名>				--创建分支
+git checkout <分支名>			--切换分支
+git branch					--查看所有分支
+
+git merge <分支名>				--合并分支
+git branch -d dev 				--删除分支
+
+解决冲突:
+① 分支一修改了一个文件
+② 分支二修改了同一个文件
+然后 git merge ..	--会提示冲突了
+这时需要手动去这个文件里解决冲突
+git log --graph --pretty=oneline --abbrev-commit	--查看分支的合并情况		
+ 			
+git merge --no-ff -m "合并说明" <合并到哪个分支>	--禁止Fast forward模式的方式合并
+(好处是即使后面删除了该分支,也能从log中看到合并记录)
+
+
+git branch -D <分支名>	 -D表示强行删除该分支(适用于该分支修改了一些东西,但是没有合并,强行删除)
+git remote		--查看远程库的信息
+git remote -v		--查看远程库更详细的信息
+
+git push origin master 	--推送分支 
+
+抓取分支:
+默认情况下,git clone 克隆的项目只有master分支
+但是远程库上有dev分支
+如果我想在dev分支上进行开发
+git checkout -b dev origin/dev		--创建本地dev分支
+
+git pull 			更新
+git branch --set-upstream dev origin/dev		--本地分支与远程库分支关联
+
+
